@@ -1,0 +1,54 @@
+#include <stdio.h>
+#include <pthread.h>
+#include <unistd.h>
+
+#define N 5
+
+pthread_mutex_t fork_mutex[N];
+
+void *philosopher(void *num)
+{
+    int id = *(int *)num;
+
+    printf("Philosopher %d is Thinking\n", id);
+
+    pthread_mutex_lock(&fork_mutex[id]);
+    printf("Philosopher %d picked Left Fork\n", id);
+
+    pthread_mutex_lock(&fork_mutex[(id + 1) % N]);
+    printf("Philosopher %d picked Right Fork\n", id);
+
+    printf("Philosopher %d is Eating\n", id);
+
+    sleep(1);
+
+    pthread_mutex_unlock(&fork_mutex[id]);
+    pthread_mutex_unlock(&fork_mutex[(id + 1) % N]);
+
+    printf("Philosopher %d finished Eating\n", id);
+
+    return NULL;
+}
+
+int main()
+{
+    pthread_t tid[N];
+    int i, id[N];
+
+    for(i = 0; i < N; i++)
+        pthread_mutex_init(&fork_mutex[i], NULL);
+
+    for(i = 0; i < N; i++)
+    {
+        id[i] = i;
+        pthread_create(&tid[i], NULL, philosopher, &id[i]);
+    }
+
+    for(i = 0; i < N; i++)
+        pthread_join(tid[i], NULL);
+
+    for(i = 0; i < N; i++)
+        pthread_mutex_destroy(&fork_mutex[i]);
+
+    return 0;
+}

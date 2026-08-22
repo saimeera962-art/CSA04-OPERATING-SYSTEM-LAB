@@ -1,0 +1,141 @@
+#include <stdio.h>
+#include <sys/stat.h>
+#include <unistd.h>
+
+void displayPermissions(mode_t mode) {
+
+    printf("\nFile Permissions: ");
+
+    printf((mode & S_IRUSR) ? "r" : "-");
+    printf((mode & S_IWUSR) ? "w" : "-");
+    printf((mode & S_IXUSR) ? "x" : "-");
+
+    printf((mode & S_IRGRP) ? "r" : "-");
+    printf((mode & S_IWGRP) ? "w" : "-");
+    printf((mode & S_IXGRP) ? "x" : "-");
+
+    printf((mode & S_IROTH) ? "r" : "-");
+    printf((mode & S_IWOTH) ? "w" : "-");
+    printf((mode & S_IXOTH) ? "x" : "-");
+
+    printf("\n");
+}
+
+int main() {
+
+    const char *filename = "sample.txt";
+    FILE *fp;
+    struct stat fileInfo;
+
+    fp = fopen(filename, "w");
+
+    if (fp == NULL) {
+        perror("File creation failed");
+        return 1;
+    }
+
+    fprintf(fp, "Operating System File Permission Demo\n");
+
+    fclose(fp);
+
+    printf("File created successfully.\n");
+
+    /* rw-r--r-- */
+    chmod(filename, 0644);
+
+    if (stat(filename, &fileInfo) == -1) {
+        perror("Unable to get file information");
+        return 1;
+    }
+
+    printf("\nPermission types:\n");
+    printf("Owner  : Read, Write\n");
+    printf("Group  : Read\n");
+    printf("Others : Read\n");
+
+    displayPermissions(fileInfo.st_mode);
+
+    printf("\nPermission notation:\n");
+    printf("r = Read\n");
+    printf("w = Write\n");
+    printf("x = Execute\n");
+    printf("- = No permission\n");
+
+    printf("\nCommon permission examples:\n");
+    printf("0777 -> rwxrwxrwx\n");
+    printf("0755 -> rwxr-xr-x\n");
+    printf("0644 -> rw-r--r--\n");
+    printf("0600 -> rw-------\n");
+
+    return 0;
+}#include <stdio.h>
+#include <sys/stat.h>
+#include <unistd.h>
+
+void displayPermissions(mode_t mode) {
+
+    printf("\nFile Permissions: ");
+
+    printf((mode & S_IRUSR) ? "r" : "-");
+    printf((mode & S_IWUSR) ? "w" : "-");
+    printf((mode & S_IXUSR) ? "x" : "-");
+
+    printf((mode & S_IRGRP) ? "r" : "-");
+    printf((mode & S_IWGRP) ? "w" : "-");
+    printf((mode & S_IXGRP) ? "x" : "-");
+
+    printf((mode & S_IROTH) ? "r" : "-");
+    printf((mode & S_IWOTH) ? "w" : "-");
+    printf((mode & S_IXOTH) ? "x" : "-");
+
+    printf("\n");
+}
+
+int main() {
+
+    const char *filename = "sample.txt";
+    FILE *fp;
+    struct stat fileInfo;
+
+    fp = fopen(filename, "w");
+
+    if (fp == NULL) {
+        perror("File creation failed");
+        return 1;
+    }
+
+    fprintf(fp, "Operating System File Permission Demo\n");
+
+    fclose(fp);
+
+    printf("File created successfully.\n");
+
+    /* rw-r--r-- */
+    chmod(filename, 0644);
+
+    if (stat(filename, &fileInfo) == -1) {
+        perror("Unable to get file information");
+        return 1;
+    }
+
+    printf("\nPermission types:\n");
+    printf("Owner  : Read, Write\n");
+    printf("Group  : Read\n");
+    printf("Others : Read\n");
+
+    displayPermissions(fileInfo.st_mode);
+
+    printf("\nPermission notation:\n");
+    printf("r = Read\n");
+    printf("w = Write\n");
+    printf("x = Execute\n");
+    printf("- = No permission\n");
+
+    printf("\nCommon permission examples:\n");
+    printf("0777 -> rwxrwxrwx\n");
+    printf("0755 -> rwxr-xr-x\n");
+    printf("0644 -> rw-r--r--\n");
+    printf("0600 -> rw-------\n");
+
+    return 0;
+}
